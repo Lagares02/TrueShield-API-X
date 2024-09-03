@@ -78,7 +78,7 @@ cd TrueShield-API-X
 > [!IMPORTANT]
 > No olvides configurar tus credenciales en el archivo `config.ini` para una correcta ejecución de la API.
 
-- **Si no tienes cuenta de X, debes crear una para obtener las credenciales necesarias: (`username`, `email`, `password`)
+- Si no tienes cuenta de X, debes crear una para obtener las credenciales necesarias: (`username`, `email`, `password`)
 
 - Configura tus variables de entorno en el archivo `config.ini`:
 
