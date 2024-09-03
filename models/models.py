@@ -14,6 +14,7 @@ class TweetModel(BaseModel):
     DatePub: str
     UserProfile: str
     NameProfile: str
+    TextPub: str
     CantLike: int
     CantRetwits: int
     CantComents: int
