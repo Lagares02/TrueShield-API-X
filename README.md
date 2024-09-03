@@ -31,12 +31,12 @@ Esta API permite la búsqueda de tweets a través de diferentes palabras clave. 
 
 `models/models.py`: Definición del modelo de datos utilizando **Pydantic**.
 
-`routes/reddit.py`: Definición de la ruta de la API.
+`routes/x.py`: Definición de la ruta de la API.
 
 **Rutas:**
 - `/contrasting`: Realiza una búsqueda de tweets en X basada en un conjunto de palabras clave y devuelve los más relevantes.
 
-`services/reddit.py`: Contiene la lógica para la consulta de tweets en X y el procesamiento de los resultados.
+`services/x.py`: Contiene la lógica para la consulta de tweets en X y el procesamiento de los resultados.
 
 ## Ejecutemos la API
 
