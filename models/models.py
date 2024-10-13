@@ -19,6 +19,8 @@ class TweetModel(BaseModel):
     CantRetwits: int
     CantComents: int
     TrueLevel: float = 0.60  # Valor predeterminado
+    matches: int
+    ContextLevel: float
     Type_item: str
 
 class ResponseModel(BaseModel):

@@ -22,14 +22,15 @@ async def search_tweets(Keywords: list):
         password=PASSWORD
     )
 
-    tweets_found = []
+    results = []
 
     # Realizar búsqueda utilizando las palabras clave combinadas
     query = " OR ".join(keywords)
     print(f"Buscando tweets con las palabras clave: {query}")
+    print(f"keywords: {len(keywords)}")
 
     # Buscar tweets con todas las palabras clave combinadas
-    tweets = await client.search_tweet(query, 'Latest')
+    tweets = await client.search_tweet(query, product = 'Top')#, 'Latest')
 
     for tweet in tweets:
         # Contar el número de coincidencias de palabras clave en el texto del tweet
@@ -37,10 +38,15 @@ async def search_tweets(Keywords: list):
         matches = sum(1 for keyword in keywords if keyword in tweet_text)
 
         # Calcular el nivel de contexto basado en coincidencias
-        ContextLevel = round(float(matches / len(keywords)), 2) if matches > 0 else 0.0
-
-        # Solo añadir tweets que tengan al menos una coincidencia
+        #ContextLevel = round(float(matches / len(keywords)), 2) if matches > 0 else 0.0
+        
         if matches >= 1:
+            ContextLevel = round(float(matches / len(keywords)), 2)
+        else:
+            ContextLevel = 0.0
+
+        # Solo añadir tweets que tengan al menos dos coincidencia
+        if matches >= 2:
             tweet_data = {
                 "Id": tweet.id,
                 "DatePub": datetime.strptime(tweet.created_at, '%a %b %d %H:%M:%S %z %Y').strftime('%Y-%m-%d'),
@@ -51,12 +57,14 @@ async def search_tweets(Keywords: list):
                 "CantRetwits": tweet.retweet_count,
                 "CantComents": tweet.reply_count,
                 "TrueLevel": 0.60,
+                "matches": matches,
                 "ContextLevel": ContextLevel,
                 "Type_item": "x"
             }
-            tweets_found.append(tweet_data)
+            results.append(tweet_data)
 
     # Ordenar los resultados por el número de coincidencias
-    tweets_found = sorted(tweets_found, key=lambda x: x["ContextLevel"], reverse=True)
+    #results = sorted(results, key=lambda x: x["ContextLevel"], reverse=True)
+    results = sorted(results, key=lambda x: x.get("matches", 0), reverse=True)
 
-    return tweets_found
+    return results
