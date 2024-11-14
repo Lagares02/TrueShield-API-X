@@ -1,5 +1,5 @@
-from fastapi import APIRouter
-from models.models import RequestModel, ResponseModel
+from fastapi import APIRouter, HTTPException
+from models.models import RequestModel
 from services.x import search_tweets
 
 router = APIRouter()
@@ -8,14 +8,20 @@ router = APIRouter()
 async def home():
     return {"message": "Bienvenido!"}
 
-@router.post("/contrasting_x", response_model=ResponseModel)
+
+@router.post("/contrasting_x")
 async def contrasting(request: RequestModel):
-    # Extraer las palabras clave de la solicitud
-    Keywords = request.keywords + request.subjects
+    try:
+        print("Recibido!!!")
+        keywords = request.keywords.keywords_en + request.subjects
+        
+        prompt = request.prompt
+        
+        results = search_tweets(keywords)
+        
+        return {
+            "X": results
+        }
 
-    # Buscar tweets usando las palabras clave
-    tweets = await search_tweets(Keywords)
-
-    # Crear la respuesta
-    response = ResponseModel(tweets=tweets)
-    return response
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

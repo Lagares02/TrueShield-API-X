@@ -1,12 +1,15 @@
 from pydantic import BaseModel
 from typing import List
 
+class KeywordsModel(BaseModel):
+    keywords_en: list[str]
+    keywords_es: list[str]
+
 class RequestModel(BaseModel):
     prompt: str
     temporality: str
-    location: str
-    keywords: List[str]
-    main_topic: str
+    location: List[str]
+    keywords: KeywordsModel
     subjects: List[str]
 
 class TweetModel(BaseModel):
@@ -18,10 +21,8 @@ class TweetModel(BaseModel):
     CantLike: int
     CantRetwits: int
     CantComents: int
-    TrueLevel: float = 0.60  # Valor predeterminado
+    Confidence: float = 0.60  # Valor predeterminado
     matches: int
-    ContextLevel: float
+    Domain: float
+    Inference: float
     Type_item: str
-
-class ResponseModel(BaseModel):
-    tweets: List[TweetModel]

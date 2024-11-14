@@ -2,6 +2,7 @@ import asyncio
 from twikit import Client
 from configparser import ConfigParser
 from datetime import datetime
+import random
 
 # Cargar credenciales de inicio de sesión desde config.ini
 config = ConfigParser()
@@ -10,7 +11,10 @@ USERNAME = config['X']['username']
 EMAIL = config['X']['email']
 PASSWORD = config['X']['password']
 
-client = Client('en-US')
+client = Client(
+   user_agent='Mozilla/5.0 (platform; rv:geckoversion) Gecko/geckotrail Firefox/firefoxversion',
+   language='en-US',
+)
 
 async def search_tweets(Keywords: list):
     # Convertir todas las palabras clave a minúsculas
@@ -41,9 +45,9 @@ async def search_tweets(Keywords: list):
         #ContextLevel = round(float(matches / len(keywords)), 2) if matches > 0 else 0.0
         
         if matches >= 1:
-            ContextLevel = round(float(matches / len(keywords)), 2)
+            Domain = round(float(matches / len(keywords)), 2)
         else:
-            ContextLevel = 0.0
+            Domain = 0.0
 
         # Solo añadir tweets que tengan al menos dos coincidencia
         if matches >= 2:
@@ -56,15 +60,15 @@ async def search_tweets(Keywords: list):
                 "CantLike": tweet.favorite_count,
                 "CantRetwits": tweet.retweet_count,
                 "CantComents": tweet.reply_count,
-                "TrueLevel": 0.60,
+                "Confidence": 0.60,
                 "matches": matches,
-                "ContextLevel": ContextLevel,
-                "Type_item": "x"
+                "Domain": Domain,
+                "Inference": random.choice(["affirmation", "assumption", "denial"]),
+                "Type_item": "X"
             }
             results.append(tweet_data)
 
     # Ordenar los resultados por el número de coincidencias
-    #results = sorted(results, key=lambda x: x["ContextLevel"], reverse=True)
     results = sorted(results, key=lambda x: x.get("matches", 0), reverse=True)
-
+    
     return results
